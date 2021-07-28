@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>QR reader</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/assets/images/logo.ico">
+        <link rel="stylesheet" type="text/css" href="/assets/css/qrread.css">
+    </head>
+    <body>
+        <img id="logo" src="https://guadalajaraconnectory.com/static/media/Connectory_Guadalajara_Color_Web.352146f6.png">
+        <div>
+            <div id="title">Escanear qr</div>
+            <div id="subtitle">Escanee el código qr del visitante</div>
+        </div>
+        <div style="display: grid; place-items: center; margin: auto;">
+            <div id="reader" ></div>
+        </div>
+        <div id="container" style="display: none;">
+            <div >
+                <form id="dataForm" method="post">
+                    <div id="fields">
+                        <div class="tag">Temperatura (llenar en momento de llegada)</div>
+                        <div><input id="tempVal" class="val" type="number" name="temp" id="temperatura" step="0.1" min="0" required></div>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+
+        <script src="/assets/js/html5-qrcode.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+
+            //QR reader library implementation
+            const html5QrCode = new Html5Qrcode("reader");
+            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                /* handle success */
+                console.log(decodedText);
+                fields = JSON.parse(decodedText);
+                html5QrCode.stop();
+                document.getElementById("reader").remove();
+                document.getElementById("title").innerText = "Datos";
+                document.getElementById("subtitle").innerText = "Estos son los datos del visitante";
+                constructFields(fields);
+            };
+            const config = { fps: 10, qrbox: 400 };
+            html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
+
+            //Tags that cataylitic uses in its fields
+            names = {
+                'nombre': 'Nombre completo',
+                'n-mero-de-tel-fono': 'Número de teléfono',
+                'correo-electr-nico': 'Correo electrónico',
+                'evento': 'Evento a atender',
+            };
+            function nameError(tag){
+                alert(`Valor '${tag}' es inválido. La página se reiniciará.`);
+                location.reload();
+                return 'default';
+            }
+
+            var fields;
+
+            //HTML field builder
+            function constructFields(fields){
+                var container = document.getElementById("container");
+                container.style.display = "block";
+                for(var x in fields){
+                    var field = document.createElement("div");
+                    var title = document.createElement("div");
+                    title.innerText = x in names ? names[x] : nameError(x);
+                    title.classList.add("tag");
+                    var value = document.createElement("div");
+                    value.innerText = fields[x];
+                    value.classList.add("val");
+                    value.id = x;
+                    field.append(title);
+                    field.append(value);
+                    document.getElementById("fields").append(field);
+                }
+
+                var field = document.createElement("button");
+                field.classList.add("submitButton");
+                field.innerText = "Subir";
+                field.id = "sbmtBtn";
+                document.getElementById("fields").append(field);
+            }
+
+            function whSend(){
+
+            }
+
+
+            //ajax POST to Catalytic webhook
+            $(document).on('submit', '#dataForm', function(e){
+                console.log("Submitred!");
+                e.preventDefault();
+                fields["temperatura"] = document.getElementById("tempVal").value;
+                $.ajax({
+                type:'POST',
+                url: "https://gdlconnectory.pushbot.com/v1/webhooks/1b02ef136cda8a77adbff974547a9ae88c06e38550d84f82b90b13b225cf5939",
+                headers: {
+                    "Authorization": "Token supersecrettoken",
+                },
+                data: fields,
+                success:function(json){
+                    alert("¡Operación exitosa! Redirigiendo a inicio.");
+                    window.location = "/";
+                }
+            })
+            });
+
+        </script>
+    </body>
+</html>
