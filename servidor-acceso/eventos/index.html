@@ -96,6 +96,9 @@
                     return formattedDate(endDate);
                 }
             });
+
+            //Webhook del workflow "Descargar lista de eventos"
+            //Por favor cambien el token que puse
             $.ajax({
                 type:'GET',
                 url: "https://gdlconnectory.pushbot.com/v1/webhooks/98d5273288296703df26ebeac385a22d03288ced6b8dc82468864289ba91686e?startRun=true",
@@ -140,6 +143,8 @@
                 },
             });
 
+            //Webhook del workflow "Eventos actuales"
+            //Por favor cambien el token que puse
             $(document).on('submit', '#dataForm', function(e){
                 console.log("Submitred!");
                 e.preventDefault();
@@ -167,6 +172,8 @@
                 }
             });
 
+            //Webhook del workflow "Filtrar eventos pasados"
+            //Por favor cambien el token que puse
             document.getElementById("updater").onclick = function(){
                 $.ajax({
                     type:'POST',

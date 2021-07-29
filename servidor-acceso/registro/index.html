@@ -58,6 +58,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         var select = document.getElementById("evento");
+        //Webhook del wokflow "Descargar lista de eventos"
+        //Por favor cambien el token que puse
         $.ajax({
             type:'GET',
             url: "https://gdlconnectory.pushbot.com/v1/webhooks/98d5273288296703df26ebeac385a22d03288ced6b8dc82468864289ba91686e?startRun=true",
@@ -81,6 +83,8 @@
             },
         });
 
+        //Webhook del workflow Registro de visitante
+        //Por favor cambien el token que puse
         $(document).on('submit', '#dataForm', function(e){
             console.log("Submitred!");
             e.preventDefault();
