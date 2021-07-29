@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registro de visitantes</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/assets/images/logo.ico">
+        <link rel="stylesheet" type="text/css" href="/assets/css/register.css">
+    </head>
+<body>
+    <div class="root">
+        <a href="/"><img id="logo" src="https://guadalajaraconnectory.com/static/media/Connectory_Guadalajara_Color_Web.352146f6.png"></a>
+        <div>
+            <div id="title" class="title">Registro Connectory</div>
+            <div id="subtitle" class="subtitle">Llene los datos solicitados</div>
+        </div>
+        <div id="container">
+            <form method="POST" id="dataForm">
+                <div id="fields">
+                    <div class="element">
+                        <div class="tag">Nombre completo</div>
+                        <div><input id="nombre" class="val" type="text" name="nombre" required></div>
+                    </div>
+                    <div class="element">
+                        <div class="tag">Número de teléfono</div>
+                        <div><input id="n-mero-de-tel-fono" class="val" type="text" name="n-mero-de-tel-fono" required></div>
+                    </div>
+                    <div class="element">
+                        <div class="tag">Correo electónico</div>
+                        <div><input id="correo-electr-nico" class="val" type="email" name="correo-electr-nico" required></div>
+                    </div>
+                    <div class="element">
+                        <div class="tag">Evento a atender</div>
+                        <div>
+                            <select id="evento" class="val" name="evento" required>
+                                <option value="" selected disabled hidden>-- Seleccione una opción --</option>
+                                <option value="" id="loaderOption" disabled>Cargando opciones...</option>
+                                <option value="" id="blankSpace" disabled></option>
+                                <option value="general">Visita general</option>
+                            </select>    
+                        </div>
+                    </div>
+                    <div class="element">
+                        <div class="tag">Temperatura</div>
+                        <div><input id="temperatura" class="val" type="number" name="temperatura" step="0.1" min="0" required></div>
+                    </div>
+                    <button type="submit" class="submitButton">Subir</button>
+                </div>
+            </form>
+        </div>
+        <div id="qrContainer">
+            <div id="qrCanvas" style="display: none;"></div>
+            <div id="qrdownloadbtn" class="submitButton" style="display: none;">Descargar</div>
+        </div>
+        <div id="ghost" style="display: none;"></div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var select = document.getElementById("evento");
+        $.ajax({
+            type:'GET',
+            url: "https://gdlconnectory.pushbot.com/v1/webhooks/98d5273288296703df26ebeac385a22d03288ced6b8dc82468864289ba91686e?startRun=true",
+            headers: {
+                "Authorization": "Token supersecrettoken",
+            },
+            success: function (data) {
+                document.getElementById("loaderOption").remove();
+                document.getElementById("blankSpace").remove();
+                for (var key in data){
+                    if(key != "teamName"){
+                        var opt = document.createElement("option");
+                        opt.setAttribute("value", data[key]["nombre"]);
+                        opt.innerText = data[key]["nombre"];
+                        select.append(opt);
+                    }
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
+            },
+        });
+
+        $(document).on('submit', '#dataForm', function(e){
+            console.log("Submitred!");
+            e.preventDefault();
+            var fields = {};
+            fields["nombre"] = document.getElementById("nombre").value;
+            fields["n-mero-de-tel-fono"] = document.getElementById("n-mero-de-tel-fono").value;
+            fields["correo-electr-nico"] = document.getElementById("correo-electr-nico").value;
+            fields["evento"] = select.value;
+            fields["temperatura"] = document.getElementById("temperatura").value;
+
+            $.ajax({
+                type:'POST',
+                url: "https://gdlconnectory.pushbot.com/v1/webhooks/1b02ef136cda8a77adbff974547a9ae88c06e38550d84f82b90b13b225cf5939",
+                headers: {
+                    "Authorization": "Token supersecrettoken",
+                },
+                data: fields,
+                success:function(json){
+                    alert("¡Operación exitosa! Redirigiendo a inicio.");
+                    window.location = "/";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

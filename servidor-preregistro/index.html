@@ -31,7 +31,14 @@
                         </div>
                         <div class="element">
                             <div class="tag">Evento a atender</div>
-                            <div><input id="evento" class="val" type="text" name="evento" required></div>
+                            <div>
+                                <select id="evento" class="val" name="evento" required>
+                                    <option value="" selected disabled hidden>-- Seleccione una opción --</option>
+                                    <option value="" id="loaderOption" disabled>Cargando opciones...</option>
+                                    <option value="" id="blankSpace" disabled></option>
+                                    <option value="general">Visita general</option>
+                                </select>    
+                            </div>
                         </div>
                         <button type="submit" class="submitButton">Subir</button>
                     </div>
@@ -48,6 +55,30 @@
         <script src="/assets/js/qrcode.js"></script>
         <script src="/assets/js/dom-to-image.min.js"></script>
         <script>
+
+            $.ajax({
+                type:'GET',
+                url: "https://gdlconnectory.pushbot.com/v1/webhooks/98d5273288296703df26ebeac385a22d03288ced6b8dc82468864289ba91686e?startRun=true",
+                headers: {
+                    "Authorization": "Token supersecrettoken",
+                },
+                success: function (data) {
+                    document.getElementById("loaderOption").remove();
+                    document.getElementById("blankSpace").remove();
+                    var select = document.getElementById("evento");
+                    for (var key in data){
+                        if(key != "teamName"){
+                            var opt = document.createElement("option");
+                            opt.setAttribute("value", data[key]["nombre"]);
+                            opt.innerText = data[key]["nombre"];
+                            select.append(opt);
+                        }
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                },
+            });
 
             var canvas;
             var ctx;

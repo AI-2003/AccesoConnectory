@@ -6,22 +6,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="/assets/images/logo.ico">
         <link rel="stylesheet" type="text/css" href="/assets/css/base.css">
-        <script src="assets/js/base.js"></script>
     </head>
     <body>
-        <img id="logo" src="https://guadalajaraconnectory.com/static/media/Connectory_Guadalajara_Color_Web.352146f6.png"> 
-        <div class="optnContainer">
-            <div id="presencialbtn" style="cursor:pointer" class="option first">Nuevo registro</div>
-            <div id="qrbtn" style="cursor:pointer" class="option second">Leer QR</div>
+        <a href="/"><img id="logo" src="https://guadalajaraconnectory.com/static/media/Connectory_Guadalajara_Color_Web.352146f6.png"></a>
+        <div class="gridCenter">
+            <div class="optnContainer">
+                <div id="presencialbtn" style="cursor:pointer" class="option first">Nuevo registro</div>
+                <div id="qrbtn" style="cursor:pointer" class="option second">Leer QR</div>
+                <div id="eventsbtn" style="cursor:pointer" class="option second">Eventos</div>
+            </div>
         </div>
 
         <script>
             document.getElementById("presencialbtn").onclick = function (event){
-                window.location="https://gdlconnectory.pushbot.com/form/formulario-presencial";
+                window.location="/registro/";
             };
             document.getElementById("qrbtn").onclick = function(event){
-                window.location="/read/";
+                window.location="/escanear/";
             };
+            document.getElementById("eventsbtn").onclick = function(event){
+                window.location="/eventos/";
+            }
         </script>
     </body>
 </html>

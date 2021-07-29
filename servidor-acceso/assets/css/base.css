@@ -18,22 +18,22 @@
 
     .option {
         display: inline-block;
-        width: 32rem;
-        line-height: 32rem;
+        width: 20rem;
+        line-height: 20rem;
         background-color: #f2f3f6;
         text-align: center;
         border-radius: 1rem;
         font-weight: 700;
-        font-size: 3rem;
+        font-size: 2rem;
+        margin: 1.5rem;
     }
 
-    .first {
-        float: left;
+    .gridCenter{
+        width: 100%;
+        display: grid;
+        place-items: center;
     }
 
-    .second {
-        float: right;
-    }
 }
 @media screen and (max-width: 720px){
     body {
@@ -56,21 +56,19 @@
     .option {
         display: inline-block;
         width: 20rem;
-        line-height: 20rem;
+        line-height: 10rem;
         background-color: #f2f3f6;
         text-align: center;
         border-radius: 1rem;
         font-weight: 700;
         font-size: 2rem;
-        margin: 2.5rem 0;
+        margin: 1rem 0;
     }
 
     .first {
-        margin-top: 0;
     }
 
     .second {
-        margin-bottom: 0;
     }
 }
 

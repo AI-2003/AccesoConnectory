@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registro de visitantes</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/assets/images/logo.ico">
+        <link rel="stylesheet" type="text/css" href="/assets/css/register.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    </head>
+    <body>
+        <div class="root">
+            <a href="/"><img id="logo" src="https://guadalajaraconnectory.com/static/media/Connectory_Guadalajara_Color_Web.352146f6.png"></a>
+            <div>
+                <div class="title">Crear evento</div>
+                <div class="subtitle">Crear un evento próximo</div>
+            </div>
+            <div id="container">
+                <form method="POST" id="dataForm">
+                    <div id="fields">
+                        <div class="element">
+                            <div class="tag">Nombre</div>
+                            <div><input id="nombre" class="val" type="text" name="nombre" required></div>
+                        </div>
+                        <div class="element">
+                            <div class="tag">Fecha y hora de inicio</div>
+                            <div><input id="inicio" class="val unselectable datePicker" type="text" name="inicio" required></div>
+                        </div>
+                        <div class="element">
+                            <div class="tag">Fecha y hora de cierre</div>
+                            <div><input id="final" class="val unselectable datePicker" type="text" name="final" required></div>
+                        </div>
+                        
+                        <button type="submit" class="submitButton">Subir</button>
+                    </div>
+                </form>
+                <div id="eventGrid">
+                    <div id="eventsCont">
+                        <div class="title">Eventos</div>
+                        <div class="subtitle">Lista de eventos actuales</div>
+                    </div>
+                    <div id="updater">Actualizar lista (filtrar eventos pasados)</div>
+                    <div id="grid">
+                        <div id="loadingGIF">
+                            <img src="/assets/images/load.gif">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="qrContainer">
+                <div id="qrCanvas" style="display: none;"></div>
+                <div id="qrdownloadbtn" class="submitButton" style="display: none;">Descargar</div>
+            </div>
+            <div id="ghost" style="display: none;"></div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            var now = new Date();
+            var initDate = new Date();
+            var endDate = new Date();
+            console.log("Starting");
+
+            function addzero(x){
+                return x < 10 ? "0"+x : x;
+            }
+            function formattedDate(obj){
+                var hourF = obj.getHours();
+                var meridian = "AM";
+
+
+                if(hourF >= 12){
+                    meridian = "PM";
+                    if(hourF>12){
+                        hourF -= 12;
+                    }
+                }
+                return `${addzero(obj.getDate())}/${addzero(obj.getMonth()+1)}/${obj.getFullYear()} ${hourF}:${addzero(obj.getMinutes())} ${meridian}`;
+            }
+
+            new flatpickr("#inicio", {
+                minDate: "today",
+                enableTime: true,
+                disableMobile: "true",
+                formatDate: (date, format, locale)=>{
+                    initDate = new Date(date);
+                    return formattedDate(initDate);
+                }
+            });
+            new flatpickr("#final", {
+                minDate: "today",
+                enableTime: true,
+                disableMobile: "true",
+                formatDate: (date, format, locale)=>{
+                    endDate = new Date(date);
+                    return formattedDate(endDate);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: "https://gdlconnectory.pushbot.com/v1/webhooks/98d5273288296703df26ebeac385a22d03288ced6b8dc82468864289ba91686e?startRun=true",
+                headers: {
+                    "Authorization": "Token supersecrettoken",
+                },
+                success: function (data) {
+                    var grid = document.getElementById("grid");
+                    for (var key in data){
+                        if(key != "teamName"){
+
+                            var container = document.createElement("div");
+                            container.classList.add("eventContainer");
+                            container.style.backgroundColor = "hsl(" + Math.floor(Math.random()*359) + ", 100%, 94%)";
+
+                            var title = document.createElement("div");
+                            title.classList.add("eventTitle");
+                            title.innerText = data[key]["nombre"];
+
+                            var start = document.createElement("div");
+                            start.classList.add("eventStart");
+                            var inDate = new Date(data[key]["inicio"]);
+                            start.innerText = `Inicio: ${formattedDate(inDate)}`;
+
+                            var end = document.createElement("div");
+                            end.classList.add("eventEnd");
+                            var enDate = new Date(data[key]["final"]);
+                            end.innerText = `Termino: ${formattedDate(enDate)}`;
+
+
+                            container.append(title);
+                            container.append(start);
+                            container.append(end);
+
+                            grid.append(container);
+                        }
+                    }
+                    document.getElementById("loadingGIF").remove();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                },
+            });
+
+            $(document).on('submit', '#dataForm', function(e){
+                console.log("Submitred!");
+                e.preventDefault();
+                var fields = {};
+                var nomVal=document.getElementById("nombre").value;
+                fields["nombre"] = nomVal;
+                fields["inicio"] = initDate.toISOString();
+                fields["final"] = endDate.toISOString();
+
+                if(nomVal!="" && document.getElementById("inicio").value!="" && document.getElementById("final").value!=""){
+                    $.ajax({
+                        type:'POST',
+                        url: "https://gdlconnectory.pushbot.com/v1/webhooks/848a58c8983805d482b51ef37d558aee71f285a3c941c33aa2d1441e9a0b09f9",
+                        headers: {
+                            "Authorization": "Token supersecrettoken",
+                        },
+                        data: fields,
+                        success:function(json){
+                            alert("¡Operación exitosa! Redirigiendo a inicio.");
+                            window.location = "/";
+                        }
+                    });
+                }else{
+                    alert("Por favor llena todos los campos.");
+                }
+            });
+
+            document.getElementById("updater").onclick = function(){
+                $.ajax({
+                    type:'POST',
+                    url: "https://gdlconnectory.pushbot.com/v1/webhooks/59f2ff1c3fe72d4082193f73d1cfd47b7993537e798b4359a7f4da40d7afb48c",
+                    headers: {
+                        "Authorization": "Token supersecrettoken",
+                    },
+                    data: {
+                        "a-partir-de-": new Date().toISOString(),
+                    },
+                    success:function(json){
+                        alert("¡Operación exitosa! Redirigiendo a inicio.");
+                        window.location = "/";
+                    }
+                });
+            }
+
+        </script>
+    </body>
+</html>

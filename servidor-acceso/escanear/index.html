@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="/assets/css/qrread.css">
     </head>
     <body>
-        <img id="logo" src="https://guadalajaraconnectory.com/static/media/Connectory_Guadalajara_Color_Web.352146f6.png">
+        <a href="/"><img id="logo" src="https://guadalajaraconnectory.com/static/media/Connectory_Guadalajara_Color_Web.352146f6.png"></a>
         <div>
             <div id="title">Escanear qr</div>
             <div id="subtitle">Escanee el código qr del visitante</div>
@@ -44,7 +44,7 @@
                 document.getElementById("subtitle").innerText = "Estos son los datos del visitante";
                 constructFields(fields);
             };
-            const config = { fps: 10, qrbox: 400 };
+            const config = { fps: 10, qrbox: 550 };
             html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
 
             //Tags that cataylitic uses in its fields

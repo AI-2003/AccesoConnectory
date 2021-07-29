@@ -1,12 +1,12 @@
 @media screen and (min-width: 721px){
-    *:focus {
+    *::selection{
         outline: none;
     }
-    body{
-        margin: 0;
+    *:focus{
+        outline: none;
     }
 
-    .root {
+    body {
         max-width: 71.5rem;
         margin: auto;
         padding: 1.5rem 2.5rem;
@@ -19,13 +19,13 @@
         margin-bottom: 2rem;
     }
     
-    #title {
+    .title {
         font-size: 1.8125rem;
         font-weight: 700;
         margin-bottom: 0.156rem;
     }
 
-    #subtitle {
+    .subtitle {
         font-size: 1.063rem;
         font-weight: 400;
         line-height: 1.43rem;
@@ -55,43 +55,6 @@
         width: 97.5%;
     }
 
-    .submitButton{
-        font-size: 1.063rem;
-        line-height: 1.43rem;
-        text-align: center;
-        border-radius: 0.5rem;
-        background-color: #0076D6;
-        color: #FFFFFF;
-        padding: 0.625rem 1rem;
-        cursor: pointer;
-        width: 100%;
-        border: none;
-    }
-
-    input:focus {
-        outline: none;
-    }
-
-    #qrCanvas {
-        display: grid;
-        place-items: center;
-        margin-bottom: 2rem;
-    }
-
-    #qrdownloadbtn {
-        font-size: 1.063rem;
-        line-height: 1.43rem;
-        text-align: center;
-        border-radius: 0.5rem;
-        background-color: #0076D6;
-        color: #FFFFFF;
-        padding: 0.625rem 1rem;
-        cursor: pointer;
-        width: 20%;
-        border: none;
-        margin: auto;
-    }
-
     #evento {
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -110,13 +73,86 @@
         background-position-x: 99%;
         background-position-y: 50%;
     }
-}
-@media screen and (max-width: 720px){
-    body{
-        margin: 0;
+
+    .submitButton{
+        font-size: 1.063rem;
+        line-height: 1.43rem;
+        text-align: center;
+        border-radius: 0.5rem;
+        background-color: #0076D6;
+        color: #FFFFFF;
+        padding: 0.625rem 1rem;
+        cursor: pointer;
+        width: 100%;
+        border: none;
+
     }
 
-    .root {
+    input:focus {
+        outline: none;
+    }
+
+    .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    #eventsCont {
+        margin-top: 3rem;
+    }
+
+    .eventContainer {
+        display: inline-block;
+        margin: 1rem;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        vertical-align: top;
+    }
+
+    .eventTitle {
+        font-size: 1.063rem;
+        line-height: 1.43rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .eventStart{
+        margin-bottom: 0.5rem;
+    }
+
+    .eventEnd{
+
+    }
+
+    #loadingGIF img{
+        width: 3rem;
+        margin: 0 1rem;
+    }
+
+    #grid {
+        margin: 0 -1rem;
+    }
+
+    #updater{
+        font-size: 1.063rem;
+        line-height: 1.43rem;
+        text-align: center;
+        border-radius: 0.5rem;
+        background-color: #0076D6;
+        color: #FFFFFF;
+        padding: 0.625rem 1rem;
+        cursor: pointer;
+        margin-top: -1rem;
+        margin-bottom: 2rem;
+        width: 30%;
+    }
+}
+@media screen and (max-width: 720px){
+    body {
         margin: 0;
         margin: 1.5rem 1rem;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -128,13 +164,13 @@
         margin-bottom: 2rem;
     }
     
-    #title {
+    .title {
         font-size: 1.8125rem;
         font-weight: 700;
         margin-bottom: 0.156rem;
     }
 
-    #subtitle {
+    .subtitle {
         font-size: 1.063rem;
         font-weight: 400;
         line-height: 1.43rem;
@@ -164,6 +200,19 @@
         width: 93%;
     }
 
+    #tempVal {
+        margin-top: 0.5rem;
+        padding: 0.75rem;
+        border: 2px solid #e2e3e6;
+        background-color: #ffffff;
+        font-size: 1.063rem;
+        line-height: 1.43rem;
+        font-weight: 400;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        width: 93%;
+    }
+
     .submitButton{
         font-size: 1.063rem;
         line-height: 1.43rem;
@@ -173,21 +222,57 @@
         color: #FFFFFF;
         padding: 0.625rem 1rem;
         cursor: pointer;
-        width: 100%;
         border: none;
+        width: 100%;
     }
 
     input:focus {
         outline: none;
     }
 
-    #qrCanvas {
-        display: grid;
-        place-items: center;
-        margin-bottom: 2rem;
+    .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 
-    #qrdownloadbtn {
+    #eventsCont {
+        margin-top: 3rem;
+    }
+
+    .eventContainer {
+        display: inline-block;
+        margin: 1rem 0;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        vertical-align: top;
+        width: 87.5%;
+    }
+
+    .eventTitle {
+        font-size: 1.063rem;
+        line-height: 1.43rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .eventStart{
+        margin-bottom: 0.5rem;
+    }
+
+    .eventEnd{
+
+    }
+
+    #loadingGIF img{
+        width: 3rem;
+        margin: 0 1rem;
+    }
+
+    #updater {
         font-size: 1.063rem;
         line-height: 1.43rem;
         text-align: center;
@@ -196,9 +281,8 @@
         color: #FFFFFF;
         padding: 0.625rem 1rem;
         cursor: pointer;
-        width: 80%;
         border: none;
-        margin: auto;
+        margin-top: -0.75rem;
+        margin-bottom: 1.5rem;
     }
 }
-
