@@ -60,10 +60,7 @@
             //Por favor cambien el token que puse
             $.ajax({
                 type:'GET',
-                url: "https://gdlconnectory.pushbot.com/v1/webhooks/98d5273288296703df26ebeac385a22d03288ced6b8dc82468864289ba91686e?startRun=true",
-                headers: {
-                    "Authorization": "Token supersecrettoken",
-                },
+                url: "/events-list",
                 success: function (data) {
                     document.getElementById("loaderOption").remove();
                     document.getElementById("blankSpace").remove();

@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+    <head>
+        <title>Registro de visitantes</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/assets/images/logo.ico">
+        <link rel="stylesheet" type="text/css" href="/assets/css/register.css">
+    </head>
+</head>
+<body>
+    
+    <h1> Login </h1>
+
+    <ul id="errors" style="display: none;">
+        
+    </ul>
+
+    <form action="/login" method="POST">
+        <div>
+            <div class="tag">Email</div>
+            <input
+            type="email"
+            name="email"
+            placeholder="Enter Email"
+            class="val"
+            />
+        </div>
+        <div>
+            <div class="tag">Password</div>
+            <input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            class="val"
+            />
+        
+        </div>
+        <button type="submit" class="btn btn-primary btn-block submitButton">Login</button>
+    
+    </form>
+
+    <script>
+
+        $(document).on('submit', '#dataForm', function(e){
+            console.log("Submitred!");
+            e.preventDefault();
+
+            $.ajax({
+                type:'POST',
+                url: "/login",
+                data: fields,
+                success:function(json){
+                    alert("¡Operación exitosa!");
+                },
+                error: function (data){
+                    var errors = JSON.parse(data.responseText);
+                    var errorsContainer = document.getElementById("errors");
+                    errorsContainer.innerHTML = "";
+
+                    for (var i in errors){
+                        var disp = document.createElement("li");
+                        disp.innerText = errors[i].msg;
+                        errorsContainer.append(disp);
+                    }
+                    document.getElementById("errors").style.display = "block";
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>

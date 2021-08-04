@@ -13,6 +13,7 @@
             <div id="title">Escanear qr</div>
             <div id="subtitle">Escanee el código qr del visitante</div>
         </div>
+        <ul id="errors" style="display: none;"></ul>
         <div style="display: grid; place-items: center; margin: auto;">
             <div id="reader" ></div>
         </div>
@@ -101,14 +102,23 @@
                 fields["temperatura"] = document.getElementById("tempVal").value;
                 $.ajax({
                 type:'POST',
-                url: "https://gdlconnectory.pushbot.com/v1/webhooks/1b02ef136cda8a77adbff974547a9ae88c06e38550d84f82b90b13b225cf5939",
-                headers: {
-                    "Authorization": "Token supersecrettoken",
-                },
+                url: "/add-visitor",
                 data: fields,
                 success:function(json){
                     alert("¡Operación exitosa! Redirigiendo a inicio.");
                     window.location = "/";
+                },
+                error: function (data){
+                    var errors = JSON.parse(data.responseText);
+                    var errorsContainer = document.getElementById("errors");
+                    errorsContainer.innerHTML = "";
+
+                    for (var i in errors){
+                        var disp = document.createElement("li");
+                        disp.innerText = errors[i].msg;
+                        errorsContainer.append(disp);
+                    }
+                    document.getElementById("errors").style.display = "block";
                 }
             })
             });

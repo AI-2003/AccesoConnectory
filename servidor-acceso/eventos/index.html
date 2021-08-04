@@ -16,8 +16,11 @@
                 <div class="title">Crear evento</div>
                 <div class="subtitle">Crear un evento próximo</div>
             </div>
+            <ul id="errors" style="display: none;">
+
+            </ul>
             <div id="container">
-                <form method="POST" id="dataForm">
+                <form method="POST" id="dataForm" action="/add-event">
                     <div id="fields">
                         <div class="element">
                             <div class="tag">Nombre</div>
@@ -40,7 +43,9 @@
                         <div class="title">Eventos</div>
                         <div class="subtitle">Lista de eventos actuales</div>
                     </div>
-                    <div id="updater">Actualizar lista (filtrar eventos pasados)</div>
+                    <form action="/refresh-events" method="post">
+                        <div id="updater">Actualizar lista (filtrar eventos pasados)</div>
+                    </form>
                     <div id="grid">
                         <div id="loadingGIF">
                             <img src="/assets/images/load.gif">
@@ -57,8 +62,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
             var now = new Date();
-            var initDate = new Date();
-            var endDate = new Date();
+            var initDate;
+            var endDate;
             console.log("Starting");
 
             function addzero(x){
@@ -101,10 +106,7 @@
             //Por favor cambien el token que puse
             $.ajax({
                 type:'GET',
-                url: "https://gdlconnectory.pushbot.com/v1/webhooks/98d5273288296703df26ebeac385a22d03288ced6b8dc82468864289ba91686e?startRun=true",
-                headers: {
-                    "Authorization": "Token supersecrettoken",
-                },
+                url: "/events-list",
                 success: function (data) {
                     var grid = document.getElementById("grid");
                     for (var key in data){
@@ -148,28 +150,35 @@
             $(document).on('submit', '#dataForm', function(e){
                 console.log("Submitred!");
                 e.preventDefault();
-                var fields = {};
-                var nomVal=document.getElementById("nombre").value;
-                fields["nombre"] = nomVal;
-                fields["inicio"] = initDate.toISOString();
-                fields["final"] = endDate.toISOString();
 
-                if(nomVal!="" && document.getElementById("inicio").value!="" && document.getElementById("final").value!=""){
-                    $.ajax({
-                        type:'POST',
-                        url: "https://gdlconnectory.pushbot.com/v1/webhooks/848a58c8983805d482b51ef37d558aee71f285a3c941c33aa2d1441e9a0b09f9",
-                        headers: {
-                            "Authorization": "Token supersecrettoken",
-                        },
-                        data: fields,
-                        success:function(json){
-                            alert("¡Operación exitosa! Redirigiendo a inicio.");
-                            window.location = "/";
+                $.ajax({
+                    type:'POST',
+                    url: "/add-event",
+                    cache: false,
+                    data: {
+                        nombre: document.getElementById("nombre").value,
+                        inicio: initDate.toISOString(),
+                        inicioVal: document.getElementById("inicio").value,
+                        final: endDate.toISOString(),
+                        finalVal: document.getElementById("final").value
+                    },
+                    success:function(json){
+                        alert("¡Operación exitosa! Redirigiendo a inicio.");
+                        window.location = "/";
+                    },
+                    error: function (data){
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = document.getElementById("errors");
+                        errorsContainer.innerHTML = "";
+
+                        for (var i in errors){
+                            var disp = document.createElement("li");
+                            disp.innerText = errors[i].msg;
+                            errorsContainer.append(disp);
                         }
-                    });
-                }else{
-                    alert("Por favor llena todos los campos.");
-                }
+                        document.getElementById("errors").style.display = "block";
+                    }
+                });
             });
 
             //Webhook del workflow "Filtrar eventos pasados"
@@ -177,16 +186,26 @@
             document.getElementById("updater").onclick = function(){
                 $.ajax({
                     type:'POST',
-                    url: "https://gdlconnectory.pushbot.com/v1/webhooks/59f2ff1c3fe72d4082193f73d1cfd47b7993537e798b4359a7f4da40d7afb48c",
-                    headers: {
-                        "Authorization": "Token supersecrettoken",
-                    },
+                    url: "/update-events",
+                    cache: false,
                     data: {
-                        "a-partir-de-": new Date().toISOString(),
+                        a_partir_de_: new Date().toISOString(),
                     },
                     success:function(json){
                         alert("¡Operación exitosa! Redirigiendo a inicio.");
                         window.location = "/";
+                    },
+                    error: function (data){
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = document.getElementById("errors");
+                        errorsContainer.innerHTML = "";
+
+                        for (var i in errors){
+                            var disp = document.createElement("li");
+                            disp.innerText = errors[i].msg;
+                            errorsContainer.append(disp);
+                        }
+                        document.getElementById("errors").style.display = "block";
                     }
                 });
             }
