@@ -61,9 +61,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', ensureAuthenticated, (req,res)=>res.sendFile(path.resolve(__dirname, './index.html')));
-app.get('/escanear/',(req,res)=>res.sendFile(path.resolve(__dirname, './escanear/index.html')));
-app.get('/registro/',(req,res)=>res.sendFile(path.resolve(__dirname, './registro/index.html')));
-app.get('/eventos/',(req,res)=>res.sendFile(path.resolve(__dirname, './eventos/index.html')));
+app.get('/escanear/', ensureAuthenticated,(req,res)=>res.sendFile(path.resolve(__dirname, './escanear/index.html')));
+app.get('/registro/', ensureAuthenticated,(req,res)=>res.sendFile(path.resolve(__dirname, './registro/index.html')));
+app.get('/eventos/', ensureAuthenticated,(req,res)=>res.sendFile(path.resolve(__dirname, './eventos/index.html')));
 app.use('/assets', express.static('assets'));
 
 app.get('/events-list', function(req, res){
