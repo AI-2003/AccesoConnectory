@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const fs = require("fs");
 const https = require("https");
+
+//Create these two certificates with mkcert tool
 const key = fs.readFileSync("localhost-key.pem", "utf-8");
 const cert = fs.readFileSync("localhost.pem", "utf-8");
 const { check, validationResult, header } = require('express-validator');
