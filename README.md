@@ -1,10 +1,11 @@
 # accesoConnectory
-Servidores para acceso automatizado a Connectory.
----
 
-Hay dos carpetas en el directorio, en una se encuentra el servicio necesario para que el usuario haga el preregistro desde su dispositivo (servidor-preregistro) y en la otra el servicio necesario para quién esté en mostrador (servidor-acceso).
+Automated access servers for Connectory.
 
+This repository contains two main directories:
+- **servidor-preregistro**: This service enables users to complete their preregistration from their personal devices.
+- **servidor-acceso**: This service is designed for on-site personnel to manage access.
 
-La funcionalidad de login está completa en el sevidor de acceso, sin embargo, no tuve tiempo de implementar una creación de usuarios por parte de los administradores. Para más información sobre mi código para el login, dejo el link con el tutorial que seguí: https://betterprogramming.pub/build-a-login-system-in-node-js-f1ba2abd19a.
+The login functionality is fully implemented in the access server. While user account creation for administrators is not yet included, the existing login system is robust and functional.
 
-Tampoco tuve tiempo de implementar el captcha en el servidor de preregistro.
+Please note that captcha integration for the preregistration server is currently under development.
